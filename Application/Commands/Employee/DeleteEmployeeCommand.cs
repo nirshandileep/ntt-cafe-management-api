@@ -1,23 +1,33 @@
-﻿using NTT.CafeManagement.Application.Commands.Cafe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NTT.CafeManagement.Infrastructure.Database;
 
 namespace NTT.CafeManagement.Application.Commands.Employee;
 
 public record DeleteEmployeeCommand(Guid EmployeeId) : CommandRequest;
 
-public class DeleteEmployeeCommandHandler : BaseCommandHandler<DeleteEmployeeCommand>
+public class DeleteEmployeeCommandHandler(ICafeManagementDbContext dbContext) : BaseCommandHandler<DeleteEmployeeCommand>
 {
-    protected override Task<Response> DoHandle()
+    private readonly ICafeManagementDbContext _dbContext = dbContext;
+    private Domain.Models.Employee _employee;
+
+    protected async override Task<Response> DoHandle()
     {
-        throw new NotImplementedException();
+        _dbContext.RemoveEntity(_employee);
+
+        await _dbContext.SaveChangesAsync();
+
+        return Response.Ok();
     }
 
-    protected override Task Validate(ValidationContext validationContext)
+    protected async override Task Validate(ValidationContext validationContext)
     {
-        throw new NotImplementedException();
+        _employee = await _dbContext.DbSet<Domain.Models.Employee>()
+               .Include(b => b.EmployeeCafeAssignments)
+               .SingleOrDefaultAsync(s => s.Id == Command.EmployeeId);
+
+        if (_employee == null)
+        {
+            validationContext.AddError("Employee with the given Id is not found.");
+            return;
+        }
     }
 }

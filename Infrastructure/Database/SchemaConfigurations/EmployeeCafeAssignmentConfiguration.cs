@@ -11,7 +11,9 @@ public class EmployeeCafeAssignmentConfiguration : IEntityTypeConfiguration<Empl
         builder.ToTable("employee_cafe_assignments");
         builder.HasKey(x => new { x.EmployeeId, x.CafeId });
         builder.Property(x => x.StartDate).IsRequired();
-        builder.HasOne(x => x.Employee).WithMany(x => x.EmployeeCafeAssignments).HasForeignKey(x => x.EmployeeId);
-        builder.HasOne(x => x.Cafe).WithMany(x => x.EmployeeCafeAssignments).HasForeignKey(x => x.CafeId);
+        builder.HasOne(x => x.Employee).WithMany(x => x.EmployeeCafeAssignments)
+            .HasForeignKey(x => x.EmployeeId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Cafe).WithMany(x => x.EmployeeCafeAssignments)
+            .HasForeignKey(x => x.CafeId).OnDelete(DeleteBehavior.Cascade);
     }
 }

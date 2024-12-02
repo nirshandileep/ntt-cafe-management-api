@@ -3,6 +3,7 @@ using NTT.CafeManagement.Infrastructure.Database;
 using NTT.CafeManagement.Infrastructure.IoC;
 using NTT.CafeManagement.IoC;
 using NTT.CafeManagement.Application.Extensions;
+using NTT.CafeManagement.Application.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,11 +1,10 @@
 ﻿using NTT.CafeManagement.Application.Commands.Employee;
-using NTT.CafeManagement.Domain.Models;
 
 namespace NTT.CafeManagement.Application.Validators
 {
-    public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCommand>
+    public class UpdateEmployeeCommandValidator : AbstractValidator<UpdateEmployeeCommand>
     {
-        public CreateEmployeeCommandValidator()
+        public UpdateEmployeeCommandValidator()
         {
             RuleFor(x => x.Employee.Name)
                 .NotEmpty()

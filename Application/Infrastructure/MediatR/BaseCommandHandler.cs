@@ -1,38 +1,36 @@
 ﻿using MediatR;
-using NTT.CafeManagement.Application.Infrastructure.Response;
-using NTT.CafeManagement.Application.Infrastructure.Validation;
 using NTT.CafeManagement.Infrastructure.Database;
 using System.Transactions;
 
-namespace NTT.CafeManagement.Application.Infrastructure.MediatR
+namespace NTT.CafeManagement.Application.Infrastructure.MediatR;
+
+public abstract class BaseCommandHandler<TCommand>
+    : IRequestHandler<TCommand, IResponse> 
+    where TCommand : CommandRequest
 {
-    public abstract class BaseCommandHandler<TCommand>
-        : IRequestHandler<TCommand, IResponse> where TCommand : CommandRequest
+    protected TCommand Command { get; private set; }
+    public ICafeManagementDbContext CafeManagementDbContext { get; set; }
+
+    public virtual async Task<IResponse> Handle(TCommand request, CancellationToken cancellationToken)
     {
-        protected TCommand Command { get; private set; }
-        public ICafeManagementDbContext CafeManagementDbContext { get; set; }
+        Command = request;
 
-        public virtual async Task<IResponse> Handle(TCommand request, CancellationToken cancellationToken)
-        {
-            Command = request;
+        var validationContext = new ValidationContext();
 
-            var validationContext = new ValidationContext();
+        await Validate(validationContext);
+        if (validationContext.HasErrors)
+            return new Response.Response(validationContext.ValidationErrors);
 
-            await Validate(validationContext);
-            if (validationContext.HasErrors)
-                return new Response.Response(validationContext.ValidationErrors);
+        using var transaction = new TransactionScope(TransactionScopeOption.Required,
+            new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+            TransactionScopeAsyncFlowOption.Enabled);
+        var result = await DoHandle();
+        transaction.Complete();
 
-            using var transaction = new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                TransactionScopeAsyncFlowOption.Enabled);
-            var result = await DoHandle();
-            transaction.Complete();
-
-            return !result.Success ? new Response.Response(result.ValidationResults) : result;
-        }
-
-        protected abstract Task Validate(ValidationContext validationContext);
-
-        protected abstract Task<Response.Response> DoHandle();
+        return !result.Success ? new Response.Response(result.ValidationResults) : result;
     }
+
+    protected abstract Task Validate(ValidationContext validationContext);
+
+    protected abstract Task<Response.Response> DoHandle();
 }

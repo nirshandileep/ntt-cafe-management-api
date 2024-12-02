@@ -1,27 +1,43 @@
-﻿
+﻿using NTT.CafeManagement.Infrastructure.Database;
+
 namespace NTT.CafeManagement.Application.Commands.Employee;
 
-public record UpdateEmployeeCommand(CreateOrUpdateEmployeeRequestDto Request) : CommandRequest;
+public record UpdateEmployeeCommand(CreateOrUpdateEmployeeRequestDto Employee) : CommandRequest;
 
-public class UpdateEmployeeCommandHandler : BaseCommandHandler<UpdateEmployeeCommand>
+public class UpdateEmployeeCommandHandler(ICafeManagementDbContext dbContext) : BaseCommandHandler<UpdateEmployeeCommand>
 {
     private Domain.Models.Employee _employee;
+    private readonly ICafeManagementDbContext _dbContext = dbContext;
+
 
     protected async override Task<Response> DoHandle()
     {
-        _employee.SetName(Command.Request.Name)
-            .SetEmail(Command.Request.Email)
-            .SetPhoneNumber(Command.Request.PhoneNumber)
-            .SetGender(Command.Request.Gender);
+        _employee.SetName(Command.Employee.Name)
+            .SetEmail(Command.Employee.Email)
+            .SetPhoneNumber(Command.Employee.PhoneNumber)
+            .SetGender(Command.Employee.Gender);
 
-        await CafeManagementDbContext.SaveChangesAsync();
+        if (Command.Employee.CafeId.HasValue)
+        {
+            if (_employee.EmployeeCafeAssignments.Any())
+            {
+                _employee.EmployeeCafeAssignments.ForEach(x => _dbContext.RemoveEntity(x));
+            }
+        }
+
+        _employee.AddCafeAssignment(Command.Employee.CafeId.Value);
+
+        await _dbContext.SaveChangesAsync();
 
         return Response.Ok();
     }
 
     protected async override Task Validate(ValidationContext validationContext)
     {
-        _employee = await CafeManagementDbContext.DbSet<Domain.Models.Employee>().FirstOrDefaultAsync(x => x.Id == Command.Request.Id);
+        _employee = await _dbContext.DbSet<Domain.Models.Employee>()
+            .Include(e => e.EmployeeCafeAssignments)
+            .ThenInclude(e => e.Cafe)
+            .FirstOrDefaultAsync(x => x.Id == Command.Employee.Id);
 
         if (_employee == null)
         {

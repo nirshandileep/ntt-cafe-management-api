@@ -2,8 +2,9 @@
 
 namespace NTT.CafeManagement.Domain.Models
 {
-    public class EmployeeCafeAssignment
+    public class EmployeeCafeAssignment : Entity
     {
+        public Guid Id { get; }
         public Guid EmployeeId { get; private set; }
         public Employee Employee { get; private set; }
         public Guid CafeId { get; private set; }

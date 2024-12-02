@@ -1,32 +1,41 @@
-﻿namespace NTT.CafeManagement.Application.Commands.Employee;
+﻿using NTT.CafeManagement.Infrastructure.Database;
+
+namespace NTT.CafeManagement.Application.Commands.Employee;
 
 public record CreateEmployeeCommand(CreateOrUpdateEmployeeRequestDto Employee) : CommandRequest;
 
-public class CreateEmployeeCommandHandler : BaseCommandHandler<CreateEmployeeCommand>
+public class CreateEmployeeCommandHandler(ICafeManagementDbContext dbContext) : BaseCommandHandler<CreateEmployeeCommand>
 {
+    private readonly ICafeManagementDbContext _dbContext = dbContext;
+
     protected async override Task<Response> DoHandle()
     {
-        var newEmployee = Domain.Models.Employee.Create(EmployeeCode())
+        var newEmployee = Domain.Models.Employee.Create(GenerateEmployeeCode())
             .SetName(Command.Employee.Name)
             .SetEmail(Command.Employee.Email)
             .SetPhoneNumber(Command.Employee.PhoneNumber)
             .SetGender(Command.Employee.Gender);
 
-        await CafeManagementDbContext.AddEntityAsync(newEmployee);
+        if (Command.Employee.CafeId.HasValue)
+            newEmployee.AddCafeAssignment(Command.Employee.CafeId.Value);
 
-        await CafeManagementDbContext.SaveChangesAsync();
+        await _dbContext.AddEntityAsync(newEmployee);
+
+        await _dbContext.SaveChangesAsync();
 
         return Response.Ok();
     }
 
-    private string EmployeeCode()
+    private string GenerateEmployeeCode()
     {
-        throw new NotImplementedException();
+        const string prefix = "UI";
+        string randomCode = Guid.NewGuid().ToString("N").Substring(0, 7).ToUpper();
+        return $"{prefix}{randomCode}";
     }
 
     protected async override Task Validate(ValidationContext validationContext)
     {
-        var employeeExists = await CafeManagementDbContext.DbSet<Domain.Models.Employee>()
+        var employeeExists = await _dbContext.DbSet<Domain.Models.Employee>()
             .AnyAsync(x => x.Email.ToLower() == Command.Employee.Email.ToLower());
 
         if (employeeExists)

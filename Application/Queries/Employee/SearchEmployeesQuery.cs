@@ -20,7 +20,7 @@ public class SearchEmployeesQueryHandler(ICafeManagementDbContext dbContext) : I
         if (!string.IsNullOrWhiteSpace(request.CafeName))
         {
             query = query.Where(e =>
-                e.EmployeeCafeAssignments.Any(a => a.Cafe.Name.ToLower().Contains(request.CafeName.ToLower())));
+                e.EmployeeCafeAssignments.Any(a => a.Cafe.Name.ToLower() == request.CafeName.ToLower()));
         }
 
         var result = await query
@@ -28,16 +28,15 @@ public class SearchEmployeesQueryHandler(ICafeManagementDbContext dbContext) : I
             {
                 Id = x.EmployeeCode,
                 Name = x.Name,
-                Email_Address = "",
+                Email_Address = x.Email,
                 Phone_Number = x.PhoneNumber,
                 Days_Worked = (x.EmployeeCafeAssignments == null || x.EmployeeCafeAssignments.Any()) ?
                     (int)(DateTime.UtcNow - x.EmployeeCafeAssignments.First().StartDate).TotalDays : 0,
                 Cafe = x.EmployeeCafeAssignments.Any() ? x.EmployeeCafeAssignments.First().Cafe.Name : ""
 
             })
-            .OrderByDescending(x => x.Days_Worked)
             .ToListAsync(cancellationToken);
 
-        return result;
+        return result.OrderByDescending(e => e.Days_Worked).ToList();
     }
 }

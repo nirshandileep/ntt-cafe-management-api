@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NTT.CafeManagement.Application.Commands.Cafe;
-using NTT.CafeManagement.Application.Dtos;
-using NTT.CafeManagement.Application.Queries.Cafe;
-
-namespace NTT.CafeManagement.Controllers
+﻿namespace NTT.CafeManagement.Controllers
 {
     [Route("api/[controller]s")]
     public class CafeController(IMediator mediator) : BaseController(mediator)
@@ -26,8 +21,8 @@ namespace NTT.CafeManagement.Controllers
             return ActionResult(await Mediator.Send(new DeleteCafeCommand(cafeId)));
         }
 
-        [HttpGet("location/{location}")]
-        public async Task<IActionResult> GetBeamConfigFilesByOrgSatelliteAndVsatProvider([FromRoute] string location)
+        [HttpGet]
+        public async Task<IActionResult> GetBeamConfigFilesByOrgSatelliteAndVsatProvider([FromQuery] string? location)
         {
             return ActionResult(await Mediator.Send(new SearchCafesQuery(location)));
         }

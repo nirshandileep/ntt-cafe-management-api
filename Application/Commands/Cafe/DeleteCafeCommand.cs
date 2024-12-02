@@ -24,10 +24,10 @@ namespace NTT.CafeManagement.Application.Commands.Cafe
 
         protected override async Task<Response> DoHandle()
         {
-            if (_cafe.EmployeeCafeAssignments.Any())
-            {
-                _cafe.EmployeeCafeAssignments.ForEach(x => _dbContext.RemoveEntity(x));
-            }
+            //if (_cafe.EmployeeCafeAssignments.Any())
+            //{
+            //    _cafe.EmployeeCafeAssignments.ForEach(x => _dbContext.RemoveEntity(x));
+            //}
 
             _dbContext.RemoveEntity(_cafe);
 

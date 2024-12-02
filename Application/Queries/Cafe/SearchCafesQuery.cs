@@ -13,9 +13,14 @@ public class SearchCafesQueryHandler(ICafeManagementDbContext dbContext) : IRequ
     {
         var query = _dbContext.DbSet<Domain.Models.Cafe>()
                 .AsNoTracking()
-                .Where(e => e.Location.ToLower().Contains(request.Location.ToLower()));
+                .AsQueryable();
 
-        var result = await query
+        if (!string.IsNullOrWhiteSpace(request.Location))
+        {
+            query = query.Where(e => e.Location.ToLower().Contains(request.Location.ToLower()));
+        }
+
+        return await query
             .Select(x => new CafeListItemDto
             {
                 Id = x.Id,
@@ -27,7 +32,5 @@ public class SearchCafesQueryHandler(ICafeManagementDbContext dbContext) : IRequ
             })
             .OrderByDescending(x => x.Employees)
             .ToListAsync(cancellationToken);
-
-        return result;
     }
 }
