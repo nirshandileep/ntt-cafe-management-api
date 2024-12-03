@@ -1,7 +1,4 @@
-﻿using MediatR;
-using NTT.CafeManagement.Infrastructure.Database;
-
-namespace NTT.CafeManagement.Application.Queries.Employee;
+﻿namespace NTT.CafeManagement.Application.Queries.Employee;
 
 public record SearchEmployeesQuery(string CafeName) : IRequest<List<EmployeeListItemDto>>;
 

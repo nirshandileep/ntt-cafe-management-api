@@ -8,18 +8,6 @@ namespace NTT.CafeManagement.Domain.Base;
 public abstract class Entity
 {
     int? _requestedHashCode;
-    //Guid _Id;
-    //public virtual Guid Id
-    //{
-    //    get
-    //    {
-    //        return _Id;
-    //    }
-    //    protected set
-    //    {
-    //        _Id = value;
-    //    }
-    //}
 
     private List<INotification> _domainEvents;
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();

@@ -1,5 +1,6 @@
 ﻿using NTT.CafeManagement.Application.Commands.Employee;
 using NTT.CafeManagement.Application.Queries.Employee;
+using NTT.CafeManagement.Infrastructure.Dtos;
 
 namespace NTT.CafeManagement.Controllers;
 
@@ -7,13 +8,13 @@ namespace NTT.CafeManagement.Controllers;
 public class EmployeeController(IMediator mediator) : BaseController(mediator)
 {
     [HttpPost]
-    public async Task<IActionResult> Create(CreateOrUpdateEmployeeRequestDto employee)
+    public async Task<IActionResult> Create(CreateEmployeeRequestDto employee)
     {
         return ActionResult(await Mediator.Send(new CreateEmployeeCommand(employee)));
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(CreateOrUpdateEmployeeRequestDto employee)
+    public async Task<IActionResult> Update(UpdateEmployeeRequestDto employee)
     {
         return ActionResult(await Mediator.Send(new UpdateEmployeeCommand(employee)));
     }

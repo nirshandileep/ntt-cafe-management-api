@@ -1,15 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35521.163 d17.12
+VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTT.CafeManagement.Api", "NTT.CafeManagement.Api.csproj", "{B81D80C1-B2E4-4E42-96E9-6E13ED05E6DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTT.CafeManagement.Api", "Api\NTT.CafeManagement.Api.csproj", "{B81D80C1-B2E4-4E42-96E9-6E13ED05E6DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{35333F72-5563-4E28-9CD5-DF74B3DE11DB} = {35333F72-5563-4E28-9CD5-DF74B3DE11DB}
+		{D22633A0-009D-48ED-832C-9F3BF2419FB1} = {D22633A0-009D-48ED-832C-9F3BF2419FB1}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTT.CafeManagement.Domain", "..\Domain\NTT.CafeManagement.Domain.csproj", "{D22633A0-009D-48ED-832C-9F3BF2419FB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTT.CafeManagement.Domain", "Domain\NTT.CafeManagement.Domain.csproj", "{D22633A0-009D-48ED-832C-9F3BF2419FB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTT.CafeManagement.Infrastructure", "..\Infrastructure\NTT.CafeManagement.Infrastructure.csproj", "{35333F72-5563-4E28-9CD5-DF74B3DE11DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTT.CafeManagement.Infrastructure", "Infrastructure\NTT.CafeManagement.Infrastructure.csproj", "{35333F72-5563-4E28-9CD5-DF74B3DE11DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTT.CafeManagement.Application", "..\Application\NTT.CafeManagement.Application.csproj", "{025F37D9-32AF-4BDF-B6A6-346732FEAF35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTT.CafeManagement.Application", "Application\NTT.CafeManagement.Application.csproj", "{025F37D9-32AF-4BDF-B6A6-346732FEAF35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

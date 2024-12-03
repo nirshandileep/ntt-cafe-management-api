@@ -1,4 +1,4 @@
-﻿namespace NTT.CafeManagement.Application.Dtos
+﻿namespace NTT.CafeManagement.Infrastructure.Dtos
 {
     public class CafeListItemDto
     {

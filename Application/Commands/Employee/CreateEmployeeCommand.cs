@@ -1,8 +1,6 @@
-﻿using NTT.CafeManagement.Infrastructure.Database;
+﻿namespace NTT.CafeManagement.Application.Commands.Employee;
 
-namespace NTT.CafeManagement.Application.Commands.Employee;
-
-public record CreateEmployeeCommand(CreateOrUpdateEmployeeRequestDto Employee) : CommandRequest;
+public record CreateEmployeeCommand(CreateEmployeeRequestDto Employee) : CommandRequest;
 
 public class CreateEmployeeCommandHandler(ICafeManagementDbContext dbContext) : BaseCommandHandler<CreateEmployeeCommand>
 {

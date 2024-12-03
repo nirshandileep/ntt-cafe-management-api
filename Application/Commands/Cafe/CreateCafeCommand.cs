@@ -1,8 +1,6 @@
-﻿using NTT.CafeManagement.Infrastructure.Database;
+﻿namespace NTT.CafeManagement.Application.Commands.Cafe;
 
-namespace NTT.CafeManagement.Application.Commands.Cafe;
-
-public record CreateCafeCommand(CreateOrUpdateCafeRequestDto Request) : CommandRequest;
+public record CreateCafeCommand(CreateCafeRequestDto Request) : CommandRequest;
 
 public class CreateCafeCommandHandler(ICafeManagementDbContext dbContext) : BaseCommandHandler<CreateCafeCommand>
 {
