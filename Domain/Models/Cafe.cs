@@ -19,6 +19,12 @@ public class Cafe : Entity
         };
     }
 
+    public Cafe SetName(string name)
+    {
+        Name = name;
+        return this;
+    }
+
     public Cafe SetDescription(string description)
     {
         Description = description;

@@ -1,6 +1,6 @@
 ﻿namespace NTT.CafeManagement.Application.Queries.Employee;
 
-public record SearchEmployeesQuery(string CafeName) : IRequest<List<EmployeeListItemDto>>;
+public record SearchEmployeesQuery(Guid? CafeId) : IRequest<List<EmployeeListItemDto>>;
 
 public class SearchEmployeesQueryHandler(ICafeManagementDbContext dbContext) : IRequestHandler<SearchEmployeesQuery, List<EmployeeListItemDto>>
 {
@@ -14,10 +14,10 @@ public class SearchEmployeesQueryHandler(ICafeManagementDbContext dbContext) : I
                     .AsNoTracking()
                     .AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(request.CafeName))
+        if (request.CafeId != null)
         {
             query = query.Where(e =>
-                e.EmployeeCafeAssignments.Any(a => a.Cafe.Name.ToLower() == request.CafeName.ToLower()));
+                e.EmployeeCafeAssignments.Any(a => a.CafeId == request.CafeId));
         }
 
         var result = await query
@@ -25,15 +25,15 @@ public class SearchEmployeesQueryHandler(ICafeManagementDbContext dbContext) : I
             {
                 Id = x.Id,
                 Name = x.Name,
-                Email_Address = x.Email,
-                Phone_Number = x.PhoneNumber,
-                Days_Worked = (x.EmployeeCafeAssignments == null || x.EmployeeCafeAssignments.Any()) ?
+                EmailAddress = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                DaysWorked = (x.EmployeeCafeAssignments == null || x.EmployeeCafeAssignments.Any()) ?
                     (int)(DateTime.UtcNow - x.EmployeeCafeAssignments.First().StartDate).TotalDays : 0,
                 Cafe = x.EmployeeCafeAssignments.Any() ? x.EmployeeCafeAssignments.First().Cafe.Name : ""
 
             })
             .ToListAsync(cancellationToken);
 
-        return result.OrderByDescending(e => e.Days_Worked).ToList();
+        return result.OrderByDescending(e => e.DaysWorked).ToList();
     }
 }

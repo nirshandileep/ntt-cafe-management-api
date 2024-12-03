@@ -1,8 +1,4 @@
-﻿using NTT.CafeManagement.Application.Commands.Employee;
-using NTT.CafeManagement.Application.Queries.Employee;
-using NTT.CafeManagement.Infrastructure.Dtos;
-
-namespace NTT.CafeManagement.Controllers;
+﻿namespace NTT.CafeManagement.Controllers;
 
 [Route("api/[controller]s")]
 public class EmployeeController(IMediator mediator) : BaseController(mediator)
@@ -25,8 +21,14 @@ public class EmployeeController(IMediator mediator) : BaseController(mediator)
         return ActionResult(await Mediator.Send(new DeleteEmployeeCommand(employeeId)));
     }
 
+    [HttpGet("{employeeId}")]
+    public async Task<IActionResult> GetById([FromRoute] string employeeId)
+    {
+        return ActionResult(await Mediator.Send(new GetEmployeeByIdQuery(employeeId)));
+    }
+
     [HttpGet]
-    public async Task<IActionResult> GetBeamConfigFilesByOrgSatelliteAndVsatProvider([FromQuery] string? cafe)
+    public async Task<IActionResult> SearchByCafe([FromQuery] Guid? cafe)
     {
         return ActionResult(await Mediator.Send(new SearchEmployeesQuery(cafe)));
     }

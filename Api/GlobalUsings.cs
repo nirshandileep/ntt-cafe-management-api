@@ -4,3 +4,6 @@ global using NTT.CafeManagement.Application.Infrastructure.Response;
 global using FluentValidation;
 global using NTT.CafeManagement.Application.Commands.Cafe;
 global using NTT.CafeManagement.Application.Queries.Cafe;
+global using NTT.CafeManagement.Application.Commands.Employee;
+global using NTT.CafeManagement.Application.Queries.Employee;
+global using NTT.CafeManagement.Infrastructure.Dtos;

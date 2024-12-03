@@ -9,7 +9,8 @@ public class UpdateCafeCommandHandler(ICafeManagementDbContext dbContext) : Base
 
     protected async override Task<Response> DoHandle()
     {
-        _cafe.SetDescription(Command.Request.Description)
+        _cafe.SetName(Command.Request.Name)
+            .SetDescription(Command.Request.Description)
             .SetLocation(Command.Request.Location)
             .SetLogoUrl(Command.Request.LogoUrl);
 

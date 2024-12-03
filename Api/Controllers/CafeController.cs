@@ -18,13 +18,19 @@ namespace NTT.CafeManagement.Controllers
         }
 
         [HttpDelete("{cafeId}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid cafeId)
+        public async Task<IActionResult> Delete([FromRoute] string cafeId)
         {
-            return ActionResult(await Mediator.Send(new DeleteCafeCommand(cafeId)));
+            return ActionResult(await Mediator.Send(new DeleteCafeCommand(Guid.Parse(cafeId))));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetBeamConfigFilesByOrgSatelliteAndVsatProvider([FromQuery] string? location)
+        [HttpGet("{cafeId}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid cafeId)
+        {
+            return ActionResult(await Mediator.Send(new GetCafeByIdQuery(cafeId)));
+        }
+
+        [HttpGet("location")]
+        public async Task<IActionResult> SearchByLocation([FromQuery] string? location)
         {
             return ActionResult(await Mediator.Send(new SearchCafesQuery(location)));
         }
