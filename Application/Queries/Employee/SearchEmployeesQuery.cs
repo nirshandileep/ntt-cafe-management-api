@@ -23,7 +23,7 @@ public class SearchEmployeesQueryHandler(ICafeManagementDbContext dbContext) : I
         var result = await query
             .Select(x => new EmployeeListItemDto
             {
-                Id = x.EmployeeCode,
+                Id = x.Id,
                 Name = x.Name,
                 Email_Address = x.Email,
                 Phone_Number = x.PhoneNumber,

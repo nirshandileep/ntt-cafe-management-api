@@ -2,7 +2,7 @@
 
 namespace NTT.CafeManagement.Application.Commands.Employee;
 
-public record DeleteEmployeeCommand(Guid EmployeeId) : CommandRequest;
+public record DeleteEmployeeCommand(string EmployeeId) : CommandRequest;
 
 public class DeleteEmployeeCommandHandler(ICafeManagementDbContext dbContext) : BaseCommandHandler<DeleteEmployeeCommand>
 {

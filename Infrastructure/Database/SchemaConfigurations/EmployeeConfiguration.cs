@@ -10,7 +10,7 @@ namespace NTT.CafeManagement.Infrastructure.Database.SchemaConfigurations
         {
             builder.ToTable("employees");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.EmployeeCode).HasMaxLength(9).IsRequired();
+            builder.Property(x => x.Id).HasMaxLength(9).IsRequired();
             builder.Property(x => x.Name).IsRequired();
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.PhoneNumber).HasMaxLength(8).IsRequired();

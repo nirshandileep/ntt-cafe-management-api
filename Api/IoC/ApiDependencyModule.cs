@@ -1,6 +1,5 @@
 ﻿using NTT.CafeManagement.Application.Infrastructure.MediatR;
 using NTT.CafeManagement.Application.IoC;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace NTT.CafeManagement.IoC;
 

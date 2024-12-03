@@ -3,7 +3,7 @@ using NTT.CafeManagement.Infrastructure.Database;
 using NTT.CafeManagement.Infrastructure.IoC;
 using NTT.CafeManagement.IoC;
 using NTT.CafeManagement.Application.Extensions;
-using NTT.CafeManagement.Application.Middlewares;
+using NTT.CafeManagement.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

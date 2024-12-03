@@ -7,7 +7,7 @@ namespace NTT.CafeManagement.Domain.Base;
 [Serializable]
 public abstract class Entity
 {
-    int? _requestedHashCode;
+    //int? _requestedHashCode;
 
     private List<INotification> _domainEvents;
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
@@ -49,18 +49,18 @@ public abstract class Entity
         return base.GetHashCode();
     }
 
-    public static bool operator ==(Entity left, Entity right)
-    {
-        if (Equals(left, null))
-            return Equals(right, null);
-        else
-            return left.Equals(right);
-    }
+    //public static bool operator ==(Entity left, Entity right)
+    //{
+    //    if (Equals(left, null))
+    //        return Equals(right, null);
+    //    else
+    //        return left.Equals(right);
+    //}
 
-    public static bool operator !=(Entity left, Entity right)
-    {
-        return !(left == right);
-    }
+    //public static bool operator !=(Entity left, Entity right)
+    //{
+    //    return !(left == right);
+    //}
 
     [NotMapped]
     public EntityState EntityState { get; set; } = EntityState.Modified;

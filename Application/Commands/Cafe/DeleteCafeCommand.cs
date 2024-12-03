@@ -7,7 +7,7 @@ namespace NTT.CafeManagement.Application.Commands.Cafe
     public class DeleteCafeCommandHandler(ICafeManagementDbContext dbContext) : BaseCommandHandler<DeleteCafeCommand>
     {
         private readonly ICafeManagementDbContext _dbContext = dbContext;
-        private Domain.Models.Cafe? _cafe;
+        private Domain.Models.Cafe _cafe;
 
         protected override async Task Validate(ValidationContext validationContext)
         {

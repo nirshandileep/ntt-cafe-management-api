@@ -12,7 +12,7 @@
             {
                 InvokeSeeder(seeder, context, services);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

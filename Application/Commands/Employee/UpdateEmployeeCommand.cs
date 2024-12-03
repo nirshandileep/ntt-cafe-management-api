@@ -19,11 +19,16 @@ public class UpdateEmployeeCommandHandler(ICafeManagementDbContext dbContext) : 
         {
             if (_employee.EmployeeCafeAssignments.Any())
             {
-                _employee.EmployeeCafeAssignments.ForEach(x => _dbContext.RemoveEntity(x));
+                _employee.EmployeeCafeAssignments
+                    .Where(e => e.CafeId != Command.Employee.CafeId.Value)
+                    .ToList()
+                    .ForEach(x => _dbContext.RemoveEntity(x));
             }
         }
 
-        _employee.AddCafeAssignment(Command.Employee.CafeId.Value);
+        if (Command.Employee.CafeId.HasValue && 
+            !_employee.EmployeeCafeAssignments.Any(e => e.CafeId == Command.Employee.CafeId.Value))
+            _employee.AddCafeAssignment(Command.Employee.CafeId.Value);
 
         await _dbContext.SaveChangesAsync();
 

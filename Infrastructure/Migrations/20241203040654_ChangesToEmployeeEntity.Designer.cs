@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NTT.CafeManagement.Infrastructure.Database;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NTT.CafeManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(CafeManagementDbContext))]
-    partial class CafeManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241203040654_ChangesToEmployeeEntity")]
+    partial class ChangesToEmployeeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,10 +60,16 @@ namespace NTT.CafeManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("NTT.CafeManagement.Domain.Models.Employee", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
                         .HasMaxLength(9)
                         .HasColumnType("character varying(9)")
-                        .HasColumnName("id");
+                        .HasColumnName("code");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -90,8 +99,8 @@ namespace NTT.CafeManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("NTT.CafeManagement.Domain.Models.EmployeeCafeAssignment", b =>
                 {
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("character varying(9)")
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uuid")
                         .HasColumnName("employee_id");
 
                     b.Property<Guid>("CafeId")
@@ -125,7 +134,7 @@ namespace NTT.CafeManagement.Infrastructure.Migrations
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_employee_cafe_assignments_employee_employee_id");
+                        .HasConstraintName("fk_employee_cafe_assignments_employees_employee_id");
 
                     b.Navigation("Cafe");
 
